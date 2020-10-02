@@ -1,5 +1,4 @@
 from vector import Vector
-from rect import Rect
 import math
 
 class Ray:
@@ -16,9 +15,9 @@ class Ray:
                 raise ValueError(f"tuple or list must have length >= 2: {len(dir)}")
 
         if not isinstance(pos, Vector):
-            raise TypeError(f"unsupported type(s) for Rect.pos: '{type(pos)}'")
+            raise TypeError(f"unsupported type(s) for Ray.pos: '{type(pos)}'")
         if not isinstance(dir, Vector):
-            raise TypeError(f"unsupported type(s) for Rect.size: '{type(size)}'")
+            raise TypeError(f"unsupported type(s) for Ray.size: '{type(size)}'")
 
         self._pos = pos
         self._dir = dir
@@ -30,17 +29,18 @@ class Ray:
 
     def _set_pos(self, pos):
         if not isinstance(pos, Vector):
-            raise TypeError(f"unsupported type(s) for Rect.pos: '{type(pos)}'")
+            raise TypeError(f"unsupported type(s) for Ray.pos: '{type(pos)}'")
         self._pos = pos
     def _set_dir(self, dir):
         if not isinstance(dir, Vector):
-            raise TypeError(f"unsupported type(s) for Rect.size: '{type(dir)}'")
+            raise TypeError(f"unsupported type(s) for Ray.dir: '{type(dir)}'")
         self._dir = dir
 
     pos = property(_get_pos, _set_pos)
     dir = property(_get_dir, _set_dir)
 
     def collision_point_with_rect(self, rect):
+        from rect import Rect
         contact_normal = Vector(0, 0) # Point of contact
         contact_point = Vector(0, 0)  # Normal at point of contact from rectangle
 
@@ -62,25 +62,57 @@ class Ray:
 
         # If t_near or t_far is NaN reject
         if t_near.x == math.nan or t_near.y == math.nan:
-            return False
+            return None, None, None, None
         if t_far.x == math.nan or t_far.y == math.nan:
-            return False
+            return None, None, None, None
 
         # If t_near is further than t_far, swap them
-        if t_near.x > t.far.x:
+        if t_near.x > t_far.x:
             t_near.x, t_far.x = t_far.x, t_near.x # Swap t_near.x and t_far.x
         if t_near.y > t_far.y:
             t_near.y, t_far.y = t_far.y, t_near.y # Swap t_near.y and t_far.y
 
         # Early rejection
         if t_near.x > t_far.y or t_near.y > t_far.x:
-            return False
+            return None, None, None, None
 
         t_hit_near = max(t_near.x, t_near.y) # Closest 'time' will be the first contact
         t_hit_far = min(t_far.x, t_far.y)    # Furthest 'time' is the contact on the opposite side
 
         # Reject if ray direction is pointing away from object
         if t_hit_near < 0:
-            return False
+            return None, None, t_hit_near, t_hit_far
 
-        # Continue: FLAG: Contact point of collision from parametric line equation
+        # Contact point of collision from parametric line equation
+        contact_point.x = self.pos.x + t_hit_near * self.dir.x
+        contact_point.y = self.pos.y + t_hit_near * self.dir.y
+
+        if t_near.x > t_near.y:
+            if inv_dir.x < 0:
+                contact_normal.x = 1
+                contact_normal.y = 0
+            else:
+                contact_normal.x = -1
+                contact_normal.y = 0
+        elif t_near.x < t_near.y:
+            if inv_dir.y < 0:
+                contact_normal.x = 0
+                contact_normal.y = 1
+            else:
+                contact_normal.x = 0
+                contact_normal.y = -1
+        elif abs(t_near.x) == abs(t_near.y):
+            if t_near.x < 0 and t_near.y < 0:
+                contact_normal.x = 1
+                contact_normal.y = 1
+            elif t_near.x < 0 and t_near.y > 0:
+                contact_normal.x = 1
+                contact_normal.y = -1
+            elif t_near.x > 0 and t_near.y < 0:
+                contact_normal.x = -1
+                contact_normal.y = 1
+            elif t_near.x > 0 and t_near.y > 0:
+                contact_normal.x = -1
+                contact_normal.y = -1
+
+        return contact_point, contact_normal, t_hit_near, t_hit_far
