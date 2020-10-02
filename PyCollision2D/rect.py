@@ -37,7 +37,6 @@ class Rect:
 
     pos = property(_get_pos, _set_pos)
     size = property(_get_size, _set_size)
-    vel = property(_get_vel, _set_vel)
 
     def collides_with_point(self, point):
         if isinstance(point, tuple) or isinstance(point, list):
