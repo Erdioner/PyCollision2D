@@ -1,4 +1,4 @@
-from vector import Vector
+from PyCollision2D.vector import Vector
 import math
 
 class Ray:
@@ -40,7 +40,7 @@ class Ray:
     dir = property(_get_dir, _set_dir)
 
     def collision_point_with_rect(self, rect):
-        from rect import Rect
+        from PyCollision2D.rect import Rect
         contact_normal = Vector(0, 0) # Point of contact
         contact_point = Vector(0, 0)  # Normal at point of contact from rectangle
 

@@ -1,4 +1,4 @@
-from vector import Vector
+from PyCollision2D.vector import Vector
 
 class Rect:
     def __init__(self, pos, size):
@@ -99,7 +99,7 @@ class Rect:
         )
 
 
-        from ray import Ray
+        from PyCollision2D.ray import Ray
         ray = Ray(
             Vector(
                 self.pos.x + self.size.x/2,
