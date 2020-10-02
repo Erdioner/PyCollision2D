@@ -8,7 +8,7 @@ setup(
     author = 'Erdioner',                   # Type in your name
     author_email = 'casper.petersson@gmail.com',      # Type in your E-Mail
     url = 'https://github.com/Erdioner/PyCollision2D/',   # Provide either the link to your github or to your website
-    download_url = 'https://github.com/Erdioner/PyCollision2D/archive/1.1.0.tar.gz',    # I explain this later on
+    download_url = 'https://github.com/Erdioner/PyCollision2D/archive/1.1.1.tar.gz',    # I explain this later on
     keywords = ['2D', '2d', 'collision', 'detection', 'resolution'],   # Keywords that define your package best
     install_requires=[
     ],
