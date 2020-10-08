@@ -116,18 +116,6 @@ class Ray:
             else:
                 contact_normal.x = 0
                 contact_normal.y = -1
-        elif t_near.x == rect.pos.x and t_near.y == rect.pos.y:
-            contact_normal.x = -1
-            contact_normal.y = -1
-        elif t_near.x == rect.pos.x+rect.size.x and t_near.y == rect.pos.y:
-            contact_normal.x = 1
-            contact_normal.y = -1
-        elif t_near.x == rect.pos.x+rect.size.x and t_near.y == rect.pos.y+rect.size.y:
-            contact_normal.x = 1
-            contact_normal.y = 1
-        elif t_near.x == rect.pos.x and t_near.y == rect.pos.y+rect.size.y:
-            contact_normal.x = -1
-            contact_normal.y = 1
 
         self._contact_normal = contact_normal     # Point of contact
         self._contact_point = contact_point       # Normal at point of contact from rectangle
